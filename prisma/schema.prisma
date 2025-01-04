@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Theme {
+  LIGHT
+  DARK
+  CUPCAKE
+  RETRO
+  AQUA
+  CYBERPUNK
+}
+
+enum FeatureTag {
+  NEW
+  WORK_IN_PROGRESS
+  SHIPPED
+  CANCELLED
+}
+
+model Post {
+  id        String    @id @default(cuid()) @map("_id")
+  url       String    @unique
+  published Boolean   @default(false)
+  theme     Theme     @default(LIGHT)
+  author    User?     @relation(fields: [authorId], references: [id])
+  authorId  String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  title     String    @default("Untitled")
+  features  Feature[]
+}
+
+model User {
+  id         String   @id @default(cuid()) @map("_id")
+  email      String   @unique
+  externalId String   @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  Post       Post[]
+  votes      Vote[]
+}
+
+model Feature {
+  id          String     @id @default(cuid()) @map("_id")
+  title       String
+  description String
+  voteCount   Int        @default(0)
+  post        Post       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId      String
+  tag         FeatureTag @default(NEW)
+  votes       Vote[]
+}
+
+model Vote {
+  id        String   @id @default(cuid()) @map("_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  feature   Feature  @relation(fields: [featureId], references: [id], onDelete: Cascade)
+  featureId String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, featureId])
+}
