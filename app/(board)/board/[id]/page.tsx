@@ -291,13 +291,13 @@ const Page = ({ params }: { params: { id: string } }) => {
                   <p className={`text-xs ${themeStyles[post.theme || 'LIGHT'].secondaryText}`}>
                     Powered by{' '}
                     <a
-                      href="https://insighto.ai"
+                      href="https://Shipright.ai"
                       target="_blank"
                       rel="noopener noreferrer"
                       className={`font-medium underline
                           ${post.theme === 'DARK' ? 'text-white' : 'text-black'}`}
                     >
-                      Insighto
+                    Shipright
                     </a>
                   </p>
                 </div>

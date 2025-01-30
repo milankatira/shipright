@@ -385,60 +385,98 @@ const BoardInfo = ({ params }: PageProps) => {
 
                     {/* Features List */}
                     <div>
-                        <h2 className="text-xl font-semibold mb-4">Features List</h2>
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-2xl font-bold text-gray-900">Features List</h2>
+                            <div className="flex items-center gap-2">
+                                <span className="text-sm text-gray-500">{features.length} features</span>
+                            </div>
+                        </div>
                         <div className="grid grid-cols-1 gap-4">
                             {features.length === 0 ? (
-                                <Card className="p-8 text-center">
-                                    <h3 className="text-xl font-semibold mb-2">No features yet!</h3>
-                                    <p className="text-gray-600">Share your board with the world and start collecting feedback.</p>
+                                <Card className="p-8 text-center bg-gray-50 border border-dashed border-gray-200">
+                                    <h3 className="text-xl font-semibold mb-3 text-gray-800">No features yet!</h3>
+                                    <p className="text-gray-600 max-w-md mx-auto">Share your board with the world and start collecting valuable feedback from your users.</p>
                                 </Card>
                             ) : (
                                 features.map((feature) => (
                                     <Card
                                         key={feature.id}
-                                        className="p-4 flex justify-between items-start"
+                                        className="p-6 hover:shadow-lg transition-shadow duration-200"
                                     >
-                                        <div>
-                                            <h3 className="font-bold">{feature.title}</h3>
-                                            <p className="text-gray-600">{feature.description}</p>
-                                            <div className="flex items-center space-x-2 mt-4">
-                                                <ChevronUp />
-                                                <span >{feature.voteCount} </span>
+                                        <div className="flex justify-between items-start gap-4">
+                                            <div className="flex-1">
+                                                <div className="flex items-center gap-3 mb-2">
+                                                    <h3 className="text-lg font-semibold text-gray-900">{feature.title}</h3>
+                                                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                                        feature.tag === 'NEW' ? 'bg-blue-50 text-blue-700' :
+                                                        feature.tag === 'WORK_IN_PROGRESS' ? 'bg-yellow-50 text-yellow-700' :
+                                                        feature.tag === 'SHIPPED' ? 'bg-green-50 text-green-700' :
+                                                        'bg-red-50 text-red-700'
+                                                    }`}>
+                                                        {feature.tag.replace(/_/g, ' ')}
+                                                    </span>
+                                                </div>
+                                                <p className="text-gray-600 mb-4">{feature.description}</p>
+                                                <div className="flex items-center gap-4">
+                                                    <div className="flex items-center gap-1.5">
+                                                        <button className="group p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200">
+                                                            <ChevronUp
+                                                                className="h-5 w-5 text-gray-500 group-hover:text-gray-700 transition-colors duration-200"
+                                                                strokeWidth={2.5}
+                                                            />
+                                                        </button>
+                                                        <span className="text-sm font-medium text-gray-700">{feature.voteCount}</span>
+                                                        <button className="group p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200">
+                                                            <ChevronUp
+                                                                className="h-5 w-5 text-gray-500 group-hover:text-gray-700 transition-colors duration-200 rotate-180"
+                                                                strokeWidth={2.5}
+                                                            />
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="flex flex-col justify-between gap-4 items-center mt-4">
-                                            <Select
-                                                value={feature.tag}
-                                                onValueChange={(value) => handleTagChange(feature.id, value as "NEW" | "WORK_IN_PROGRESS" | "SHIPPED" | "CANCELLED")}
-                                            >
-                                                <SelectTrigger className="w-[120px] p-2 border rounded text-gray-600">
-                                                    <SelectValue placeholder="Select a status" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectGroup>
-                                                        <SelectLabel>Status</SelectLabel>
-                                                        <SelectItem value="NEW">⭐ New</SelectItem>
-                                                        <SelectItem value="WORK_IN_PROGRESS">🏗️ Work In Progress</SelectItem>
-                                                        <SelectItem value="SHIPPED">✅ Shipped</SelectItem>
-                                                        <SelectItem value="CANCELLED">❌ Cancelled</SelectItem>
-                                                    </SelectGroup>
-                                                </SelectContent>
-                                            </Select>
-                                            <Button
-                                                variant={'ghost'}
-                                                onClick={() => handleDeleteFeature(feature.id)}
-                                                className="px-2 py-1 text-sm"
-                                                disabled={isDeletingFeature === feature.id}
-                                            >
-                                                {isDeletingFeature === feature.id ? (
-                                                    <LoadingSpinner size="sm" />
-                                                ) : (
-                                                    <>
-                                                        Delete
-                                                        <Trash2 />
-                                                    </>
-                                                )}
-                                            </Button>
+                                            <div className="flex flex-col gap-3">
+                                                <Select
+                                                    value={feature.tag}
+                                                    onValueChange={(value) => handleTagChange(feature.id, value as Feature["tag"])}
+                                                >
+                                                    <SelectTrigger className="w-[150px] bg-white">
+                                                        <SelectValue placeholder="Update status" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectGroup>
+                                                            <SelectLabel className="text-xs font-semibold text-gray-500">Status</SelectLabel>
+                                                            <SelectItem value="NEW" className="flex items-center gap-2">
+                                                                <span className="flex items-center gap-1.5">⭐ New</span>
+                                                            </SelectItem>
+                                                            <SelectItem value="WORK_IN_PROGRESS">
+                                                                <span className="flex items-center gap-1.5">🏗️ In Progress</span>
+                                                            </SelectItem>
+                                                            <SelectItem value="SHIPPED">
+                                                                <span className="flex items-center gap-1.5">✅ Shipped</span>
+                                                            </SelectItem>
+                                                            <SelectItem value="CANCELLED">
+                                                                <span className="flex items-center gap-1.5">❌ Cancelled</span>
+                                                            </SelectItem>
+                                                        </SelectGroup>
+                                                    </SelectContent>
+                                                </Select>
+                                                <Button
+                                                    variant="ghost"
+                                                    onClick={() => handleDeleteFeature(feature.id)}
+                                                    className="text-gray-500 hover:text-red-600 hover:bg-red-50"
+                                                    disabled={isDeletingFeature === feature.id}
+                                                >
+                                                    {isDeletingFeature === feature.id ? (
+                                                        <LoadingSpinner size="sm" />
+                                                    ) : (
+                                                        <div className="flex items-center gap-2">
+                                                            <Trash2 className="h-4 w-4" />
+                                                            <span>Delete</span>
+                                                        </div>
+                                                    )}
+                                                </Button>
+                                            </div>
                                         </div>
                                     </Card>
                                 ))

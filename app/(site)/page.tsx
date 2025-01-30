@@ -3,14 +3,88 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
-import { ArrowRight, ThumbsUp, Zap, Users, TrendingUp, BarChart, Check, Menu, Star, X, ArrowRightIcon } from 'lucide-react'
+import { ArrowRight, ThumbsUp, Zap, Users, TrendingUp, BarChart, Check, Menu, Star, X, ArrowRightIcon, ChevronUp } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import AnimatedShinyText from '@/components/ui/animated-shiny-text'
-import { SignedIn, SignedOut } from '@clerk/nextjs'
+import { SignedIn, SignedOut, SignInButton, } from '@clerk/nextjs'
+import { SignIn } from '@clerk/nextjs';
 import { StartupRealitySection } from '@/components/startup-reality-section'
 import PricingSection from '@/components/pricing-section'
-
+const themeStyles = {
+  LIGHT: {
+    background: "bg-gray-50",
+    container: "bg-white/80 border border-gray-100",
+    input: "bg-white ring-gray-300 text-gray-900",
+    button: "bg-indigo-500 hover:bg-indigo-600 text-white",
+    text: "text-gray-800",
+    secondaryText: "text-gray-600",
+    upvoteButton: {
+      default: "bg-white text-gray-800 border-gray-300 hover:bg-gray-100",
+      active: "bg-indigo-500 text-white font-bold"
+    }
+  },
+  DARK: {
+    background: "bg-[#191e24]",
+    container: "bg-[#1d232a]/80 border-0",
+    input: "bg-[#1d232a] text-gray-100 placeholder-gray-500 ring-0",
+    button: "bg-[#7480ff] hover:bg-[#5b6af7] text-black",
+    text: "text-gray-100",
+    secondaryText: "text-gray-400",
+    upvoteButton: {
+      default: "bg-[#25262b] hover:bg-[#2c2d33] text-gray-400 border-0",
+      active: "bg-[#7480ff] text-black border-0 font-bold"
+    }
+  },
+  CUPCAKE: {
+    background: "bg-[#faf7f7]",
+    container: "bg-white shadow-sm border-0",
+    input: "bg-white ring-1 ring-gray-200 text-gray-800 placeholder-gray-400",
+    button: "bg-[#75CDCD] hover:bg-[#65bdbd] text-white",
+    text: "text-gray-800",
+    secondaryText: "text-gray-500",
+    upvoteButton: {
+      default: "bg-white shadow-sm hover:shadow rounded-xl",
+      active: "bg-[#75CDCD] text-white font-bold"
+    }
+  },
+  RETRO: {
+    background: "bg-amber-50",
+    container: "bg-white/80 border border-amber-100",
+    input: "bg-white ring-amber-200 text-gray-900",
+    button: "bg-amber-600 hover:bg-amber-700 text-white",
+    text: "text-gray-800",
+    secondaryText: "text-amber-800",
+    upvoteButton: {
+      default: "bg-amber-200 hover:bg-amber-300 text-amber-800",
+      active: "bg-amber-600 text-white font-bold"
+    }
+  },
+  AQUA: {
+    background: "bg-cyan-50",
+    container: "bg-white/80 border border-cyan-100",
+    input: "bg-white ring-cyan-200 text-gray-900",
+    button: "bg-cyan-600 hover:bg-cyan-700 text-white",
+    text: "text-gray-800",
+    secondaryText: "text-cyan-800",
+    upvoteButton: {
+      default: "bg-cyan-200 hover:bg-cyan-300 text-cyan-800",
+      active: "bg-cyan-600 text-white font-bold"
+    }
+  },
+  CYBERPUNK: {
+    background: "bg-violet-900",
+    container: "bg-violet-800/80 border border-violet-600",
+    input: "bg-violet-900 ring-violet-600 text-violet-50",
+    button: "bg-purple-500 hover:bg-purple-600 text-white",
+    text: "text-violet-50",
+    secondaryText: "text-violet-300",
+    upvoteButton: {
+      default: "bg-violet-700 hover:bg-violet-800 text-violet-300",
+      active: "bg-purple-500 text-white font-bold"
+    }
+  }
+} as const;
 const BackgroundGrid = () => {
   return (
     <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#8882_1px,transparent_1px),linear-gradient(to_bottom,#8882_1px,transparent_1px)] bg-[size:14px_24px]">
@@ -24,7 +98,7 @@ export default function LandingPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
-      <header className="sticky w-full top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 mx-auto max-w-c-1390 px-4 md:px-8 2xl:px-0">
+      <header className="sticky w-screen top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 mx-auto flex justify-center px-4 md:px-8 2xl:px-0">
         <div className="container flex h-16 max-w-screen-xl items-center justify-between px-4">
           <Link className="flex items-center space-x-2" href="/">
             <motion.div
@@ -44,15 +118,23 @@ export default function LandingPage() {
           <div className="flex items-center space-x-4">
             <SignedOut>
               <Button variant="ghost" className="hidden md:inline-flex">
-                <Link href={'/sign-in'}>
-                  Log in
-                </Link>
-              </Button>
-              <Link href={'/sign-in'}>
-                <Button className="bg-gray-900 text-white hover:bg-gray-800">
+              {/* <SignIn fallbackRedirectUrl='/welcome' forceRedirectUrl='/welcome' > */}
+
+                {/* <Link href={'/sign-in'}> */}
+                {/* <Button className="bg-gray-900 text-white hover:bg-gray-800">
                   Collect Feedback For Free
-                </Button>
-              </Link>
+                </Button> */}
+                {/* </Link> */}
+              {/* </SignIn> */}
+
+              <SignInButton
+                  fallbackRedirectUrl='/dashboard'
+                  forceRedirectUrl='/dashboard'
+                />
+                {/* <Link href={'/sign-in'}>
+                  Log in
+                </Link> */}
+              </Button>
             </SignedOut>
             <SignedIn>
               <Link href={'/dashboard'}>
@@ -75,8 +157,9 @@ export default function LandingPage() {
         {/* <LogoCloudSection /> */}
         <FeaturesSection />
         <DemoSection />
-        <TestimonialsSection />
+        {/* <TestimonialsSection /> */}
         {/* <PricingSection /> */}
+        <AboutGridSection />
         <PricingSection />
         <FaqSection />
         <CtaSection />
@@ -156,7 +239,7 @@ function HeroSection() {
         >
           <div className="absolute inset-0 bg-gradient-to-r from-gray-500/10 to-gray-600/10 rounded-2xl transform rotate-1"></div>
           <div className="absolute inset-0 bg-gradient-to-r from-gray-500/10 to-gray-600/10 rounded-2xl transform -rotate-1"></div>
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-4xl mx-auto relative">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-3xl mx-auto relative">
             <div className="space-y-6">
               <FeatureVoteItem
                 title="Dark mode support"
@@ -183,10 +266,17 @@ function HeroSection() {
 
 function FeatureVoteItem({ title, description, votes }) {
   const [isHovered, setIsHovered] = useState(false)
+  const [hasVoted, setHasVoted] = useState(false)
+
+  const handleVote = () => {
+    if (!hasVoted) {
+      setHasVoted(true)
+    }
+  }
 
   return (
     <motion.div
-      className="flex items-center justify-between border-b border-gray-100 pb-4 last:border-b-0 last:pb-0"
+      className="flex items-center justify-between border-b border-gray-100 pb-4 last:border-b-0 last:pb-0 rounded-xl"
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       whileHover={{ scale: 1.02 }}
@@ -194,21 +284,26 @@ function FeatureVoteItem({ title, description, votes }) {
     >
       <div>
         <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-        <p className="text-sm text-gray-500">{description}</p>
+        <p className="mt-2 text-sm text-gray-500">{description}</p>
       </div>
-      <div className="flex items-center gap-2">
-        <Button
-          variant="ghost"
-          size="sm"
-          className={`transition-colors duration-200 ${isHovered ? 'bg-gray-100 text-gray-800' : ''}`}
-        >
-          <ThumbsUp className="h-4 w-4 mr-2" />
-          Vote
-        </Button>
-        <span className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800">
+      <button
+        onClick={handleVote}
+        disabled={hasVoted}
+        className={`flex items-center flex-col gap-2 px-3 py-2 rounded-lg text-sm bg-indigo-500
+          ${hasVoted
+            ? 'bg-gray-100 text-white'
+            : 'bg-transparent hover:bg-gray-50'}
+          ${hasVoted ? 'cursor-not-allowed' : 'hover:scale-105'}
+          transition-all duration-200 ease-in-out`}
+      >
+        <ChevronUp
+          className={`h-4 w-4 transition-transform duration-200 ease-in-out
+            ${hasVoted ? 'text-white' : 'text-gray-500'}`}
+        />
+        <span className={`font-medium ${hasVoted ? 'text-white' : 'text-gray-600'}`}>
           {votes}
         </span>
-      </div>
+      </button>
     </motion.div>
   )
 }
@@ -269,10 +364,35 @@ function FeaturesSection() {
 }
 
 function DemoSection() {
+  const demoFeatures = [
+    {
+      id: 1,
+      title: "Dark mode support",
+      description: "My eyes hurt at night! Please add this.",
+      votes: 48,
+      tag: "IN_PROGRESS"
+    },
+    {
+      id: 2,
+      title: "Mobile app",
+      description: "Would love to use this on the go!",
+      votes: 36,
+      tag: "NEW"
+    },
+    {
+      id: 3,
+      title: "API access",
+      description: "Need to integrate with our system",
+      votes: 29,
+      tag: "PLANNED"
+    }
+  ];
+
   return (
     <section className="py-20 relative overflow-hidden">
       <div className="container px-4 mx-auto max-w-screen-xl">
         <div className="grid md:grid-cols-2 gap-12 items-center">
+          {/* Left side content remains unchanged */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -306,6 +426,8 @@ function DemoSection() {
               ))}
             </ul>
           </motion.div>
+
+          {/* Updated right side with feature board demo */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -314,14 +436,45 @@ function DemoSection() {
             className="relative"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-gray-500/10 to-gray-600/10 rounded-2xl transform rotate-3"></div>
-            <div className="relative bg-white rounded-2xl shadow-2xl p-4">
-              <div className="aspect-video bg-gray-100 rounded-lg"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-gray-500/10 to-gray-600/10 rounded-2xl transform -rotate-1"></div>
+            <div className="relative bg-white rounded-2xl shadow-2xl p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-semibold text-gray-900">Feature Requests</h3>
+                <span className="text-sm text-gray-500">{demoFeatures.length} items</span>
+              </div>
+              <div className="space-y-4">
+                {demoFeatures.map((feature) => (
+                  <div
+                    key={feature.id}
+                    className="flex items-center justify-between p-4 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-200"
+                  >
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className="font-medium text-gray-900">{feature.title}</h4>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium
+                          ${feature.tag === 'NEW' ? 'bg-blue-50 text-blue-600' :
+                          feature.tag === 'IN_PROGRESS' ? 'bg-yellow-50 text-yellow-600' :
+                          'bg-green-50 text-green-600'}`}>
+                          {feature.tag.replace('_', ' ')}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-500">{feature.description}</p>
+                    </div>
+                    <div className="flex items-center gap-2 ml-4">
+                      <button className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-50">
+                        <ChevronUp className="h-4 w-4 text-gray-400" />
+                        <span className="text-sm font-medium text-gray-600">{feature.votes}</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </motion.div>
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 function TestimonialsSection() {
@@ -461,6 +614,79 @@ function CtaSection() {
     </section>
   )
 }
+// Add this after FeaturesSection and before DemoSection
 
+function AboutGridSection() {
+  return (
+    <section className="py-24 relative overflow-hidden">
+      <div className="container px-4 mx-auto max-w-screen-xl">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Yellow Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="bg-[#7480ff] rounded-3xl p-8"
+          >
+            <h3 className="text-2xl font-bold text-white mb-4">
+              Collect user feedback
+            </h3>
+            <p className="text-white/60">
+              Use your Insighto's board to let users submit features they want.
+            </p>
+            <div className="mt-6 bg-white/90 rounded-xl p-6">
+              <input
+                type="text"
+                disabled
+                placeholder="Suggest a feature"
+                className="w-full px-4 py-2 rounded-lg bg-white border border-gray-200"
+              />
+            </div>
+          </motion.div>
+
+          {/* Dark Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="bg-gray-900 rounded-3xl p-8 lg:col-span-2"
+          >
+            <h3 className="text-2xl font-bold text-white mb-4">
+              Prioritize features
+            </h3>
+            <p className="text-gray-400">
+              Users upvote features they want. You know what to ship next.
+            </p>
+            <div className="mt-6 space-y-4">
+              <div className="bg-gray-800/50 rounded-xl p-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="text-white">Add LemonSqueezy integration</span>
+                  <span className="px-2 py-1 rounded-full text-base bg-green-500/20 text-green-400">
+                    Yes, ship this! ✓
+                  </span>
+                </div>
+                <div className="bg-[#7480ff] text-white font-medium px-3 py-1 rounded-lg">
+                  48
+                </div>
+              </div>
+              <div className="bg-gray-800/50 rounded-xl p-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="text-white">A new pricing table</span>
+                  <span className="px-2 rounded-full text-base bg-blue-500/20 text-blue-400">
+                    Maybe ship this 🤔
+                  </span>
+                </div>
+                <div className="bg-[#7480ff] text-white font-medium px-3 py-1 rounded-lg">
+                  12
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 
