@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React, { useState } from 'react'
 import {motion} from 'framer-motion';
-import { Menu, ThumbsUp, X } from 'lucide-react';
+import { CheckCheck, Menu, ThumbsUp, X } from 'lucide-react';
 import { SignedIn, SignedOut } from '@clerk/nextjs';
 import { Button } from './ui/button';
 
@@ -17,7 +17,7 @@ const Navbar = () => {
                             animate={{ scale: 1 }}
                             transition={{ type: "spring", stiffness: 260, damping: 20 }}
                         >
-                            <ThumbsUp className="h-8 w-8 text-gray-900" />
+                            <CheckCheck className="h-8 w-8 text-gray-900" />
                         </motion.div>
                         <span className="font-bold text-xl text-gray-900">shipright</span>
                     </Link>

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
-import { ArrowRight, ThumbsUp, Zap, Users, TrendingUp, BarChart, Check, Menu, Star, X, ArrowRightIcon, ChevronUp } from 'lucide-react'
+import { ArrowRight, ThumbsUp, Zap, Users, TrendingUp, BarChart, Check, Menu, Star, X, ArrowRightIcon, ChevronUp, CheckCheck } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import AnimatedShinyText from '@/components/ui/animated-shiny-text'
@@ -106,7 +106,7 @@ export default function LandingPage() {
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 260, damping: 20 }}
             >
-              <ThumbsUp className="h-8 w-8 text-gray-900" />
+              <CheckCheck className="h-8 w-8 text-gray-900" />
             </motion.div>
             <span className="font-bold text-xl text-gray-900">shipright</span>
           </Link>
@@ -118,16 +118,16 @@ export default function LandingPage() {
           <div className="flex items-center space-x-4">
             <SignedOut>
               <Button variant="ghost" className="hidden md:inline-flex">
-              {/* <SignIn fallbackRedirectUrl='/welcome' forceRedirectUrl='/welcome' > */}
+                {/* <SignIn fallbackRedirectUrl='/welcome' forceRedirectUrl='/welcome' > */}
 
                 {/* <Link href={'/sign-in'}> */}
                 {/* <Button className="bg-gray-900 text-white hover:bg-gray-800">
                   Collect Feedback For Free
                 </Button> */}
                 {/* </Link> */}
-              {/* </SignIn> */}
+                {/* </SignIn> */}
 
-              <SignInButton
+                <SignInButton
                   fallbackRedirectUrl='/dashboard'
                   forceRedirectUrl='/dashboard'
                 />
@@ -222,13 +222,30 @@ function HeroSection() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="flex flex-col sm:flex-row justify-center gap-4"
           >
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-gray-800 to-gray-900 text-white hover:opacity-90"
-            >
-              Collect Feedback For Free
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <SignedOut>
+              <SignInButton >
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-gray-800 to-gray-900 text-white hover:opacity-90"
+                >
+                  Collect Feedback For Free
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </SignInButton>
+            </SignedOut>
+
+
+            <SignedIn>
+              <Link href={'/dashboard'}>
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-gray-800 to-gray-900 text-white hover:opacity-90"
+                >
+                  Collect Feedback For Free
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            </SignedIn>
           </motion.div>
         </div>
         <motion.div
@@ -453,8 +470,8 @@ function DemoSection() {
                         <h4 className="font-medium text-gray-900">{feature.title}</h4>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium
                           ${feature.tag === 'NEW' ? 'bg-blue-50 text-blue-600' :
-                          feature.tag === 'IN_PROGRESS' ? 'bg-yellow-50 text-yellow-600' :
-                          'bg-green-50 text-green-600'}`}>
+                            feature.tag === 'IN_PROGRESS' ? 'bg-yellow-50 text-yellow-600' :
+                              'bg-green-50 text-green-600'}`}>
                           {feature.tag.replace('_', ' ')}
                         </span>
                       </div>
@@ -603,10 +620,27 @@ function CtaSection() {
               Start collecting votes and shape your product roadmap today.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button size="lg" className="bg-white text-gray-800 hover:bg-gray-50">
-                Collect Feedback For Free
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+
+
+              <SignedOut>
+                <SignInButton >
+                  <Button size="lg" className="bg-white text-gray-800 hover:bg-gray-50"
+                  >
+                    Collect Feedback For Free
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </SignInButton>
+              </SignedOut>
+
+
+              <SignedIn>
+                <Link href={'/dashboard'}>
+                  <Button size="lg" className="bg-white text-gray-800 hover:bg-gray-50">
+                    Collect Feedback For Free
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+              </SignedIn>
             </div>
           </div>
         </motion.div>
