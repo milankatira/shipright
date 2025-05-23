@@ -25,7 +25,7 @@ const Dashboard = () => {
         const fetchBoards = async () => {
             setIsLoading(true);
             try {
-                const userData = userId && await syncUserInDb({ id: userId });
+                const userData = userId && await syncUserInDb();
                 if (!userId) return;
 
                 const posts = userData && await getPosts(userId);

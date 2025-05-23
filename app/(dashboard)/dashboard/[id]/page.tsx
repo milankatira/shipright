@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getPostByUrl, deletePost, updatePostTheme } from "@/action/post.action";
+import { getPostByUrl, deletePost, updatePostTheme, updatePostAllowUserToCreateFeature } from "@/action/post.action";
 import {
     createFeature,
     getFeaturesByPostId,
@@ -19,6 +19,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { useTransition } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface PageProps {
     params: {
@@ -35,6 +36,7 @@ interface Board {
     createdAt: Date;
     updatedAt: Date;
     theme: "LIGHT" | "DARK" | "CUPCAKE" | "RETRO" | "AQUA" | "CYBERPUNK";
+    allowUserToCreateFeature: boolean; // Added the new field
 }
 
 
@@ -80,13 +82,11 @@ const BoardInfo = ({ params }: PageProps) => {
                         description: "Board not found",
                         variant: "destructive",
                     });
-                    router.push("/dashboard");
-                    return;
+                } else {
+                    setBoard(fetchedBoard);
+                    const fetchedFeatures = await getFeaturesByPostId(fetchedBoard.id);
+                    setFeatures(fetchedFeatures);
                 }
-
-                setBoard(fetchedBoard);
-                const fetchedFeatures = await getFeaturesByPostId(fetchedBoard.id);
-                setFeatures(fetchedFeatures);
             } catch (err) {
                 toast({
                     title: "Error",
@@ -208,6 +208,25 @@ const BoardInfo = ({ params }: PageProps) => {
         }
     };
 
+    const handleAllowUserToCreateFeatureChange = async (checked: boolean) => {
+        if (!board) return;
+        try {
+            const updatedBoard = await updatePostAllowUserToCreateFeature(board.id, checked);
+            setBoard(updatedBoard);
+            toast({
+                title: "Success",
+                description: `Feature creation for users ${checked ? 'enabled' : 'disabled'}.`,
+            });
+        } catch (err) {
+            toast({
+                title: "Error",
+                description: "Failed to update feature creation setting",
+                variant: "destructive",
+            });
+            console.error("Error updating allowUserToCreateFeature:", err);
+        }
+    };
+
     const DeleteBoardDialog = () => (
         <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
             <DialogTrigger asChild>
@@ -320,14 +339,14 @@ const BoardInfo = ({ params }: PageProps) => {
                         <div className="flex items-center space-x-2 border border-gray-100 bg-white rounded-lg px-2">
                             <input
                                 type="text"
-                                value={`https://insigh.to/b/${board.url}`}
+                                value={`${window.location.origin}/board/${board.url}`}
                                 readOnly
                                 className="w-full p-2  font-bold  rounded focus:outline-none"
                             />
                             {/* <Files /> */}
 
                             <Files onClick={() =>
-                                navigator.clipboard.writeText(`https://insigh.to/b/${board.url}`)
+                                navigator.clipboard.writeText(`${window.location.origin}/board/${board.url}`)
                             } className="bg-white w-8 h-8 hover:bg-black p-1 rounded-md text-black hover:text-white transition-all duration-300" />
 
                             <ArrowUpRight
@@ -337,6 +356,20 @@ const BoardInfo = ({ params }: PageProps) => {
 
                         </div>
                     </div>
+
+                    {/* Checkbox for allowing user feature creation */}
+                    <div className="mb-4 flex items-center">
+                        <Checkbox
+                            id="allowUserToCreateFeature"
+                            checked={board.allowUserToCreateFeature}
+                            onCheckedChange={(checked) => handleAllowUserToCreateFeatureChange(checked as boolean)}
+                            className="mr-2" // Keep existing styling if needed
+                        />
+                        <label htmlFor="allowUserToCreateFeature" className="text-sm font-medium text-gray-700">
+                            Allow users to suggest features
+                        </label>
+                    </div>
+
                     <DeleteBoardDialog />
 
 

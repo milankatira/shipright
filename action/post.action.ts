@@ -86,3 +86,19 @@ export async function updatePostTheme(
     throw new Error("Could not update post theme");
   }
 }
+
+export async function updatePostAllowUserToCreateFeature(
+  id: string,
+  allowUserToCreateFeature: boolean,
+) {
+  try {
+    const updatedPost = await prisma.post.update({
+      where: { id },
+      data: { allowUserToCreateFeature },
+    });
+    return updatedPost;
+  } catch (error) {
+    console.error("Error updating allowUserToCreateFeature:", error);
+    throw new Error("Could not update allowUserToCreateFeature");
+  }
+}

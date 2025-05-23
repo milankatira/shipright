@@ -70,7 +70,7 @@ export async function updateFeature(input: UpdateFeatureInput) {
         title: input.title,
         description: input.description,
         voteCount: input.voteCount,
-        tag: input.tag, // Update the tag if provided
+        tag: input.tag,
       },
     });
     return updatedFeature;

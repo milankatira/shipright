@@ -10,13 +10,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <ClerkProvider>
 
-        <body className="bg-gray-100">
-          <Navbar />
-          {children}
-        </body>
-      </ClerkProvider>
+
+      <body className="bg-gray-100">
+        <Navbar />
+        {children}
+      </body>
+
     </html>
   )
 }

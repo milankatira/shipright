@@ -2,18 +2,13 @@
 
 import React from 'react'
 import { UserButton } from "@clerk/nextjs"
-// import { currentUser } from "@clerk/nextjs/server"
-// import { syncUserInDb } from '@/action/auth.action';
 import { Button } from '../ui/button';
 import { usePathname, useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 
 const Navbar =  () => {
-    // const auth = await currentUser();
     const pathname = usePathname();
     const router = useRouter();
-
-    // await syncUserInDb(auth);
 
     const isDashboard = pathname === '/dashboard';
 

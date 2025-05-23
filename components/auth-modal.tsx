@@ -25,14 +25,14 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     </DialogDescription>
                 </DialogHeader>
                 <SignedOut>
-                    <SignInButton />
+                    <SignInButton forceRedirectUrl={"/dashboard"} />
                 </SignedOut>
                 <SignedIn>
                     <UserButton />
                 </SignedIn>
                 {/* <SignUp
-                    afterSignUpUrl="/welcome"
-                    redirectUrl="/welcome"
+                    afterSignUpUrl="/dashboard"
+                    redirectUrl="/dashboard"
                     appearance={{
                         elements: {
                             rootBox: "mx-auto",

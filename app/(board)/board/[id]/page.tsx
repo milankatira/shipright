@@ -230,78 +230,80 @@ const Page = ({ params }: { params: { id: string } }) => {
           <p className={`font-bold text-2xl ${themeStyles[post.theme || 'LIGHT'].text}`}>{post?.title}</p>
           <div className={`p-6 mb-8`}>
             <div className='flex flex-row space-x-4 w-full'>
-              <div className={`rounded-xl shadow-md p-6 max-w-xl mb-8 w-full md:w-2/5 backdrop-blur-sm
+              {post?.allowUserToCreateFeature && (
+                <div className={`rounded-xl shadow-md p-6 max-w-xl mb-8 w-full md:w-2/5 backdrop-blur-sm
                   ${themeStyles[post.theme || 'LIGHT'].container} h-fit`}>
-                <div className="mb-6">
-                  <h2 className={`text-xl font-semibold ${themeStyles[post.theme || 'LIGHT'].text}`}>
-                    Suggest a Feature
-                  </h2>
-                  <p className={`text-sm mt-1 ${themeStyles[post.theme || 'LIGHT'].secondaryText}`}>
-                    Share your ideas for improving this product
-                  </p>
-                </div>
+                  <div className="mb-6">
+                    <h2 className={`text-xl font-semibold ${themeStyles[post.theme || 'LIGHT'].text}`}>
+                      Suggest a Feature
+                    </h2>
+                    <p className={`text-sm mt-1 ${themeStyles[post.theme || 'LIGHT'].secondaryText}`}>
+                      Share your ideas for improving this product
+                    </p>
+                  </div>
 
-                <form onSubmit={form.handleSubmit(handleSubmit)}>
-                  <div>
-                    <label htmlFor="title" className={`block text-sm font-medium mb-1 ${themeStyles[post.theme || 'LIGHT'].text}`}>
-                      Title
-                    </label>
-                    <input
-                      {...form.register('title')}
-                      type="text"
-                      className={`mt-1 block w-full rounded-lg border border-gray-700 px-3 py-2 shadow-sm
+                  <form onSubmit={form.handleSubmit(handleSubmit)}>
+                    <div>
+                      <label htmlFor="title" className={`block text-sm font-medium mb-1 ${themeStyles[post.theme || 'LIGHT'].text}`}>
+                        Title
+                      </label>
+                      <input
+                        {...form.register('title')}
+                        type="text"
+                        className={`mt-1 block w-full rounded-lg border border-gray-700 px-3 py-2 shadow-sm
                         ${themeStyles[post.theme || 'LIGHT'].input}
                       `}
-                      placeholder="Title"
-                    />
-                    {form.formState.errors.title && (
-                      <p className="text-red-500 text-sm mt-1">{form.formState.errors.title.message}</p>
-                    )}
-                  </div>
-                  <div className="mt-4">
-                    <label htmlFor="description" className={`block text-sm font-medium mb-1 ${themeStyles[post.theme || 'LIGHT'].text}`}>
-                      Description
-                    </label>
-                    <textarea
-                      {...form.register('description')}
-                      rows={3}
-                      className={`mt-1 block w-full rounded-lg border border-gray-700 px-3 py-2 shadow-sm
+                        placeholder="Title"
+                      />
+                      {form.formState.errors.title && (
+                        <p className="text-red-500 text-sm mt-1">{form.formState.errors.title.message}</p>
+                      )}
+                    </div>
+                    <div className="mt-4">
+                      <label htmlFor="description" className={`block text-sm font-medium mb-1 ${themeStyles[post.theme || 'LIGHT'].text}`}>
+                        Description
+                      </label>
+                      <textarea
+                        {...form.register('description')}
+                        rows={3}
+                        className={`mt-1 block w-full rounded-lg border border-gray-700 px-3 py-2 shadow-sm
                         ${themeStyles[post.theme || 'LIGHT'].input}
                       `}
-                      placeholder="Description"
-                    />
-                    {form.formState.errors.description && (
-                      <p className="text-red-500 text-sm mt-1">{form.formState.errors.description.message}</p>
-                    )}
-                  </div>
-                  <div className="mt-4">
-                    <button
-                      type="submit"
-                      className={`inline-flex items-center px-4 py-2 rounded-lg shadow-sm text-sm font-bold w-full justify-center
+                        placeholder="Description"
+                      />
+                      {form.formState.errors.description && (
+                        <p className="text-red-500 text-sm mt-1">{form.formState.errors.description.message}</p>
+                      )}
+                    </div>
+                    <div className="mt-4">
+                      <button
+                        type="submit"
+                        className={`inline-flex items-center px-4 py-2 rounded-lg shadow-sm text-sm font-bold w-full justify-center
                         ${themeStyles[post.theme || 'LIGHT'].button}
                         transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
-                      disabled={isLoading}
-                    >
-                      {isLoading ? 'Creating...' : 'Create Feature'}
-                    </button>
-                  </div>
-                </form>
+                        disabled={isLoading}
+                      >
+                        {isLoading ? 'Creating...' : 'Create Feature'}
+                      </button>
+                    </div>
+                  </form>
 
-                <div className="mt-6 text-center">
-                  <p className={`text-xs ${themeStyles[post.theme || 'LIGHT'].secondaryText}`}>
-                    Powered by{' '}
-                    <a
-                      href="https://Shipright.ai"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`font-medium underline
+                  <div className="mt-6 text-center">
+                    <p className={`text-xs ${themeStyles[post.theme || 'LIGHT'].secondaryText}`}>
+                      Powered by{' '}
+                      <a
+                        href="/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`font-medium underline
                           ${post.theme === 'DARK' ? 'text-white' : 'text-black'}`}
-                    >
-                    Shipright
-                    </a>
-                  </p>
+                      >
+                      Shipright
+                      </a>
+                    </p>
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="space-y-4 w-full md:w-3/5 overflow-scroll h-screen">
                 {features.map((feature) => (

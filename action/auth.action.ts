@@ -1,18 +1,21 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { currentUser } from '@clerk/nextjs/server';
 
-export async function syncUserInDb(auth: any) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function syncUserInDb() {
+  const auth = await currentUser();
+  if (!auth?.id) return;
   const user = await prisma.user.findFirst({
     where: { externalId: auth.id },
   });
 
-
   if (!user) {
-    await prisma.user.create({
+    return await prisma.user.create({
       data: {
-        externalId: auth.id,
-        email: auth.emailAddresses[0].emailAddress,
+        externalId: auth?.id,
+        email: auth.emailAddresses[0].emailAddress!,
       },
     });
   }
