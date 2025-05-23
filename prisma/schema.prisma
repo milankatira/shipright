@@ -24,17 +24,17 @@ enum FeatureTag {
 }
 
 model Post {
-  id        String    @id @default(cuid()) @map("_id")
-  url       String    @unique
-  published Boolean   @default(false)
-  theme     Theme     @default(LIGHT)
-  author    User?     @relation(fields: [authorId], references: [id])
-  authorId  String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  title     String    @default("Untitled")
-  features  Feature[]
-  allowUserToCreateFeature Boolean @default(false)
+  id                       String    @id @default(cuid()) @map("_id")
+  url                      String    @unique
+  published                Boolean   @default(false)
+  theme                    Theme     @default(LIGHT)
+  author                   User?     @relation(fields: [authorId], references: [id])
+  authorId                 String?
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+  title                    String    @default("Untitled")
+  features                 Feature[]
+  allowUserToCreateFeature Boolean   @default(false)
 }
 
 model User {
