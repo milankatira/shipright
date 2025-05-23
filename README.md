@@ -2,7 +2,7 @@
 
 Shipright helps product teams collect, prioritize, and track user feedback efficiently. Transform user insights into impactful product decisions with our intuitive feature voting platform.
 
-![Shipright Platform](screenshot.png)
+
 
 ## Features
 
@@ -28,10 +28,14 @@ Shipright helps product teams collect, prioritize, and track user feedback effic
 
 ## Tech Stack
 
-- Next.js 13
-- React 18
+- Next.js
+- React
 - TypeScript
 - Tailwind CSS
 - Clerk Authentication
 - Prisma
 - Mongodb
+
+## Flow Diagram
+
+![Flow Diagram](flow-diagram.png)
