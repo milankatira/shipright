@@ -25,7 +25,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     </DialogDescription>
                 </DialogHeader>
                 <SignedOut>
-                    <SignInButton forceRedirectUrl={"/dashboard"} />
+                    <SignInButton forceRedirectUrl={window.location.pathname} />
                 </SignedOut>
                 <SignedIn>
                     <UserButton />

@@ -117,7 +117,7 @@ export default function LandingPage() {
           </nav>
           <div className="flex items-center space-x-4">
             <SignedOut>
-              <SignInButton forceRedirectUrl={"/dashboard"} >
+              <SignInButton forceRedirectUrl={window.location.pathname} >
                 <Button variant="outline">Sign In</Button>
               </SignInButton>
             </SignedOut>
@@ -208,7 +208,7 @@ function HeroSection() {
             className="flex flex-col sm:flex-row justify-center gap-4"
           >
             <SignedOut>
-              <SignInButton forceRedirectUrl={"/dashboard"} >
+              <SignInButton forceRedirectUrl={window.location.pathname} >
                 <Button
                   size="lg"
                   className="bg-gradient-to-r from-gray-800 to-gray-900 text-white hover:opacity-90"
@@ -608,7 +608,7 @@ function CtaSection() {
 
 
               <SignedOut>
-                <SignInButton forceRedirectUrl={"/dashboard"} >
+                <SignInButton forceRedirectUrl={window.location.pathname}>
                   <Button size="lg" className="bg-white text-gray-800 hover:bg-gray-50"
                   >
                     Collect Feedback For Free

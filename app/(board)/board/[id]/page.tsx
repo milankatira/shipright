@@ -11,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
 import { notFound } from 'next/navigation'
+import { syncUserInDb } from '@/action/auth.action'
 
 interface Feature {
   id: string
@@ -120,31 +121,32 @@ const Page = ({ params }: { params: { id: string } }) => {
   })
   const [isInitialLoading, setIsInitialLoading] = useState(true)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!params.id) throw new Error('No ID provided');
+  const fetchData = async () => {
+    try {
+      if (!params.id) throw new Error('No ID provided');
+      userId && syncUserInDb();
 
-        const postData = await getPostByUrl(params.id);
 
-        if (!postData) {
-          notFound();
-        }
+      const postData = await getPostByUrl(params.id);
 
-        setPost(postData);
-
-        if (postData?.id) {
-          const featuresData = await getFeaturesByPostId(postData.id);
-          setFeatures(featuresData);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
+      if (!postData) {
         notFound();
-      } finally {
-        setIsInitialLoading(false);
       }
-    };
 
+      setPost(postData);
+
+      if (postData?.id) {
+        const featuresData = await getFeaturesByPostId(postData.id);
+        setFeatures(featuresData);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      notFound();
+    } finally {
+      setIsInitialLoading(false);
+    }
+  };
+  useEffect(() => {
     params.id && fetchData();
   }, [params?.id]);
 
@@ -206,7 +208,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
       setFeatures(prev => prev.map(feature =>
         feature.id === featureId
-          ? { ...response.feature, hasVoted: true }
+          ? { ...response.feature, hasVoted: response.hasVoted }
           : feature
       ));
     } catch (error) {
@@ -228,7 +230,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       <div className={`${themeStyles[post.theme || 'LIGHT'].background} min-h-screen w-screen`}>
         <div className={`p-6 max-w-[1000px] mx-auto min-h-screen`}>
           <p className={`font-bold text-2xl ${themeStyles[post.theme || 'LIGHT'].text}`}>{post?.title}</p>
-          <div className={`p-6 mb-8`}>
+          <div className={`py-6 px-0 mb-8`}>
             <div className='flex flex-row space-x-4 w-full'>
               {post?.allowUserToCreateFeature && (
                 <div className={`rounded-xl shadow-md p-6 max-w-xl mb-8 w-full md:w-2/5 backdrop-blur-sm
@@ -298,7 +300,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         className={`font-medium underline
                           ${post.theme === 'DARK' ? 'text-white' : 'text-black'}`}
                       >
-                      Shipright
+                        Shipright
                       </a>
                     </p>
                   </div>
@@ -324,12 +326,10 @@ const Page = ({ params }: { params: { id: string } }) => {
 
                       <button
                         onClick={() => handleUpvote(feature.id)}
-                        disabled={feature.hasVoted}
                         className={`flex items-center flex-col gap-2 px-3 py-2 rounded-lg text-sm
                           ${feature.hasVoted
                             ? themeStyles[post.theme || 'LIGHT'].upvoteButton?.active || themeStyles[post.theme || 'LIGHT'].button
                             : themeStyles[post.theme || 'LIGHT'].upvoteButton?.default || 'bg-transparent'}
-                          ${feature.hasVoted ? 'cursor-not-allowed' : 'hover:scale-105'}
                           transition-all duration-200 ease-in-out`}
                       >
                         <ChevronUp

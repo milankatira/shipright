@@ -14,8 +14,6 @@ export const metadata = {
     publisher: 'Shipright',
     applicationName: 'Shipright',
     generator: 'Next.js',
-    themeColor: '#7480ff',
-    viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
     robots: 'index, follow',
     icons: {
       icon: {

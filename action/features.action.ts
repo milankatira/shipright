@@ -119,46 +119,66 @@ export async function upvoteFeature(
   userId: string,
 ): Promise<VoteResponse> {
   try {
-    // Check if user has already voted
     const existingVote = await hasUserVoted(featureId, userId);
 
     if (existingVote) {
+      // If user has already voted, remove the vote
+      const [deletedVote, updatedFeature] = await prisma.$transaction([
+        prisma.vote.delete({
+          where: {
+            userId_featureId: {
+              userId,
+              featureId,
+            },
+          },
+        }),
+        prisma.feature.update({
+          where: { id: featureId },
+          data: {
+            voteCount: {
+              decrement: 1,
+            },
+          },
+        }),
+      ]);
+
       return {
-        success: false,
-        message: "You have already voted for this feature",
+        success: true,
+        message: "Vote removed successfully",
+        hasVoted: false,
+        feature: updatedFeature,
+      };
+    } else {
+      // If user hasn't voted, create a new vote
+      const [vote, updatedFeature] = await prisma.$transaction([
+        prisma.vote.create({
+          data: {
+            userId,
+            featureId,
+          },
+        }),
+        prisma.feature.update({
+          where: { id: featureId },
+          data: {
+            voteCount: {
+              increment: 1,
+            },
+          },
+        }),
+      ]);
+
+      return {
+        success: true,
+        message: "Vote recorded successfully",
         hasVoted: true,
+        feature: updatedFeature,
       };
     }
-
-    // Create vote and increment count in a transaction
-    const [vote, updatedFeature] = await prisma.$transaction([
-      prisma.vote.create({
-        data: {
-          userId,
-          featureId,
-        },
-      }),
-      prisma.feature.update({
-        where: { id: featureId },
-        data: {
-          voteCount: {
-            increment: 1,
-          },
-        },
-      }),
-    ]);
-
-    return {
-      success: true,
-      message: "Vote recorded successfully",
-      hasVoted: true,
-      feature: updatedFeature,
-    };
   } catch (error) {
-    console.error("Error upvoting feature:", error);
+    console.error("Error toggling vote:", error);
     return {
       success: false,
-      message: "Could not upvote feature",
+      message: "Could not toggle vote",
       hasVoted: false,
     };
   }
