@@ -13,7 +13,7 @@ interface UpdateFeatureInput {
   title?: string;
   description?: string;
   voteCount?: number;
-  tag?: "NEW" | "WORK_IN_PROGRESS" | "SHIPPED" | "CANCELLED"; // Include tag in the update input
+  tag?: "NEW" | "WORK_IN_PROGRESS" | "SHIPPED" | "CANCELLED";
 }
 
 interface VoteResponse {
@@ -122,8 +122,7 @@ export async function upvoteFeature(
     const existingVote = await hasUserVoted(featureId, userId);
 
     if (existingVote) {
-      // If user has already voted, remove the vote
-      const [deletedVote, updatedFeature] = await prisma.$transaction([
+      const [updatedFeature] = await prisma.$transaction([
         prisma.vote.delete({
           where: {
             userId_featureId: {
@@ -149,8 +148,7 @@ export async function upvoteFeature(
         feature: updatedFeature,
       };
     } else {
-      // If user hasn't voted, create a new vote
-      const [vote, updatedFeature] = await prisma.$transaction([
+      const [updatedFeature] = await prisma.$transaction([
         prisma.vote.create({
           data: {
             userId,
