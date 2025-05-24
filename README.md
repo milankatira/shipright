@@ -2,8 +2,6 @@
 
 Shipright helps product teams collect, prioritize, and track user feedback efficiently. Transform user insights into impactful product decisions with our intuitive feature voting platform.
 
-
-
 ## Features
 
 - 🎯 **Feature Voting System**
