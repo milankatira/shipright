@@ -117,24 +117,9 @@ export default function LandingPage() {
           </nav>
           <div className="flex items-center space-x-4">
             <SignedOut>
-              <Button variant="ghost" className="hidden md:inline-flex">
-                {/* <SignIn fallbackRedirectUrl='/welcome' forceRedirectUrl='/welcome' > */}
-
-                {/* <Link href={'/sign-in'}> */}
-                {/* <Button className="bg-gray-900 text-white hover:bg-gray-800">
-                  Collect Feedback For Free
-                </Button> */}
-                {/* </Link> */}
-                {/* </SignIn> */}
-
-                <SignInButton
-                  fallbackRedirectUrl='/dashboard'
-                  forceRedirectUrl='/dashboard'
-                />
-                {/* <Link href={'/sign-in'}>
-                  Log in
-                </Link> */}
-              </Button>
+            <SignInButton>
+              <Button variant="outline">Sign In</Button>
+            </SignInButton>
             </SignedOut>
             <SignedIn>
               <Link href={'/dashboard'}>
