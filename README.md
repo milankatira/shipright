@@ -34,6 +34,6 @@ Shipright helps product teams collect, prioritize, and track user feedback effic
 - Prisma
 - Mongodb
 
-## Flow Diagram
+## Schema Diagram
 
 ![Flow Diagram](flow-diagram.png)
